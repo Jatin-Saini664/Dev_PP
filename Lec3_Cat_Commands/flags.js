@@ -26,31 +26,31 @@ console.log(joinedString);
 
 // -b flag
 
-// let count =1;
+let count =1;
 
-// function addLineNumberToNonEmptyLines(data){
-//     for(let i=0;i<data.length;i++){
-//         if(data[i]!=''){
-//             data[i]=`${count}. ${data[i]}`;
-//             count++;
-//         }
-//     }
-//     let addedLineNumber = data.join("\n");
-//     console.log(addedLineNumber);
-// }
+function addLineNumberToNonEmptyLines(data){
+    for(let i=0;i<data.length;i++){
+        if(data[i]!=''){
+            data[i]=`${count}. ${data[i]}`;
+            count++;
+        }
+    }
+    let addedLineNumber = data.join("\n");
+    console.log(addedLineNumber);
+}
 
-// addLineNumberToNonEmptyLines(data);
+addLineNumberToNonEmptyLines(data);
 
 
 // -n flag
 
-// function addLineNumberToAllLines(data){
-//     for(let i=1;i<data.length+1;i++){
-//         data[i-1]=`${i}. ${data[i-1]}`;
-//     }
-//     let addedLineNumber = data.join("\n");
-//     console.log(addedLineNumber);
+function addLineNumberToAllLines(data){
+    for(let i=1;i<data.length+1;i++){
+        data[i-1]=`${i}. ${data[i-1]}`;
+    }
+    let addedLineNumber = data.join("\n");
+    console.log(addedLineNumber);
 
-// }
+}
 
-// addLineNumberToAllLines(data);
+addLineNumberToAllLines(data);

@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 let fs = require('fs');
 
@@ -21,6 +22,7 @@ let filesKaData="";
 
 for(let i=0;i<files.length;i++){
     filesKaData+=fs.readFileSync(files[i]);
+    filesKaData += "\r\n";
 }
 
 console.log(filesKaData);
@@ -36,20 +38,35 @@ if(flags.includes('-s')){
     console.log(joinedString);
 }
 
-let count=1;
-
-if(flags.includes('-b')){
-    
-    if(removedSpaces.length!=0)
-        addLineNumberToNonEmptyLines(removedSpaces);
-    else
-        addLineNumberToNonEmptyLines(data);
-}else if(flags.includes('-n')){
-    if(removedSpaces.length!=0)
+if (flags.includes("-n") && flags.includes("-b")) {
+    if (flags.indexOf("-n") < flags.indexOf("-b")) {
+      // -n pehle aya tha
+      if (flags.includes("-s")) {
         addLineNumberToAllLines(removedSpaces);
-    else
+      } else {
         addLineNumberToAllLines(data);
-}
+      }
+    } else {
+      // -b pehle aya tha
+      if (flags.includes("-s")) {
+        addLineNumberToNonEmptyLines(removedSpaces);
+      } else {
+        addLineNumberToNonEmptyLines(data);
+      }
+    }
+  } else if (flags.includes("-n")) {
+    if (flags.includes("-s")) {
+      addLineNumberToAllLines(removedSpaces);
+    } else {
+      addLineNumberToAllLines(data);
+    }
+  } else if (flags.includes("-b")) {
+    if (flags.includes("-s")) {
+      addLineNumberToNonEmptyLines(removedSpaces);
+    } else {
+      addLineNumberToNonEmptyLines(data);
+    }
+  }
 
 // -n flag
 
@@ -64,6 +81,7 @@ function addLineNumberToAllLines(data){
 // -b flag
 
 function addLineNumberToNonEmptyLines(data){
+    let count=1;
     for(let i=0;i<data.length;i++){
         if(data[i]!=''){
             data[i]=`${count}. ${data[i]}`;
