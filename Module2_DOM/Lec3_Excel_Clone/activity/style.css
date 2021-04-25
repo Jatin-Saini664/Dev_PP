@@ -1,0 +1,87 @@
+*{
+    box-sizing: border-box;
+    margin:0px;
+    padding: 0px;
+}
+
+.menu{
+    border: 1px solid;
+    height:30px;
+}
+
+.menu-options{
+    border: 1px solid;
+    height: 60px;
+}
+
+.address-content{
+    border: 1px solid;
+    height: 30px;
+}
+
+.cells-content{
+    height: calc(100vh - 150px);
+    /* background: green; */
+    overflow: auto;
+    position: relative;
+}
+
+.sheets{
+    border: 1px solid;
+    height: 30px;
+}
+
+.row {
+    display: flex;
+}
+
+.cell {
+    border: 1px solid;
+    min-height: 30px;
+    min-width: 80px;
+}
+
+
+.top-left-cell{
+    background-color: rgb(148, 173, 173);
+    position: absolute;
+    left: 0px;
+    height: 30px;
+    width: 35px;
+    z-index: 3;
+}
+
+.top-row{
+    background-color: aquamarine;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    position: absolute;
+    left: 35px;
+}
+
+.top-row-cell{
+    border: 1px solid;
+    min-height: 30px;
+    min-width: 80px;
+}
+
+.left-col{
+    background-color: aquamarine;
+    position: absolute;
+    z-index: 2;
+    top: 30px;
+}
+
+.left-col-cell{
+    height: 30px;
+    width: 35px;
+    border: 1px solid;
+}
+
+.cells{
+    position: absolute;
+    left: 35px;
+    top: 30px;
+}
