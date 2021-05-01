@@ -25,10 +25,14 @@ function initCells(){
 }
 initCells();
 
-let db;
+
+let sheetsDB = [];
+
+let db; // active-sheet db
+let visitedCells; // active sheet ke visited cells
 
 function initDB(){
-    db = [];
+    let newSheetDB = [];
     for(let i=0 ; i<100 ; i++){
         let row = [];
         for(let j=0 ; j<26 ; j++){
@@ -39,11 +43,16 @@ function initDB(){
                 value:"",
                 formula:"",
                 childrens:[],
-                parents:[]
+                parents:[],
+                visited:false
             }
             row.push(cellObject);
         }
-        db.push(row);
+        newSheetDB.push(row);
     }
+    visitedCells = [];
+    db = newSheetDB;
+    sheetsDB.push({db:newSheetDB ,visitedCells:visitedCells});
+    console.log(sheetsDB);
 }
 initDB();
