@@ -3,6 +3,11 @@ let recordButton = document.querySelector("#record-video");
 let photoButton = document.querySelector("#capture-photo");
 let recordingState = false;
 let constraints = { video: true };
+let zoomin = document.querySelector('#in');
+let zoomout = document.querySelector('#out');
+let maxZoom = 3;
+let minZoom = 1;
+let currentZoom = 1;
 let recordedData;
 let mediaRecorder;
 
@@ -28,6 +33,20 @@ let mediaRecorder;
     console.log("Inside on stop !!");
     console.log(e);
   };
+
+  zoomin.addEventListener("click", function(){
+      if(currentZoom<maxZoom){
+          currentZoom+=0.1;
+        videoPlayer.style.transform = `scale(${currentZoom})`;
+      }
+  })
+
+  zoomout.addEventListener("click", function(){
+      if(currentZoom>minZoom){
+          currentZoom-=0.1;
+          videoPlayer.style.transform = `scale(${currentZoom})`;
+      }
+  })
 
   // attach click event on recordButton
   recordButton.addEventListener("click", function () {
@@ -71,7 +90,15 @@ function capturePhotos() {
   canvas.height = videoPlayer.videoHeight;
   canvas.width = videoPlayer.videoWidth;
 
+  
+
   let ctx = canvas.getContext("2d");
+
+  if(currentZoom!=1){
+    ctx.translate(canvas.width/2, canvas.height/2);
+    ctx.scale(currentZoom, currentZoom);
+    ctx.translate(-canvas.width/2, -canvas.height/2);
+  }
   ctx.drawImage(videoPlayer, 0, 0);
 
   let imageUrl = canvas.toDataURL("image/jpg"); //canvas object => file url String
