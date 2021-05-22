@@ -59,7 +59,35 @@ function setUI(){
     for(let i=0 ; i<visitedCells.length ; i++){
       let {rowId , colId} = visitedCells[i];
       let cellObject = db[rowId][colId];
-      document.querySelector(`div[rowid="${rowId}"][colid="${colId}"]`).innerHTML = cellObject.value;
+      let selectedCell= document.querySelector(`div[rowid="${rowId}"][colid="${colId}"]`);
+      selectedCell.innerHTML = cellObject.value;
+      let allFontStyles = cellObject.fontStyle;
+      for(let fs in allFontStyles){
+        if(allFontStyles[fs]){
+          if(fs=="bold")
+            setOldFontStyle("bold", selectedCell);
+          else if(fs=="italic")
+            setOldFontStyle("italic", selectedCell);
+          else if(fs=="underline")
+            setOldFontStyle("underline", selectedCell);
+        }
+      }
+      let textAlign = cellObject.textAlign;
+      if(textAlign=="center"){
+        selectedCell.style.textAlign="center";
+      }else if(textAlign=="right"){
+        selectedCell.style.textAlign="right";
+      }
+    }
+}
+
+function setOldFontStyle(styleName, selectedCell){
+    if (styleName == "bold") {
+      selectedCell.style.fontWeight = "bold";
+    } else if (styleName == "italic") {
+      selectedCell.style.fontStyle = "italic";
+    } else {
+      selectedCell.style.textDecoration = "underline";
     }
 }
 
@@ -71,6 +99,13 @@ function initUI(){
     // }
     for(let i=0 ; i<visitedCells.length ; i++){
       let {rowId , colId} = visitedCells[i];
-      document.querySelector(`div[rowid="${rowId}"][colid="${colId}"]`).innerHTML = "";
+      let cell = document.querySelector(`div[rowid="${rowId}"][colid="${colId}"]`);
+      cell.innerHTML = "";
+      cell.style = "";
+      let allactiveStyles = document.querySelectorAll('.active-font-style');
+      for(let i=0;i<allactiveStyles.length;++i){
+        allactiveStyles[i].classList.remove('active-font-style');
+      }
+      left.classList.add("active-font-style");
     }
 }

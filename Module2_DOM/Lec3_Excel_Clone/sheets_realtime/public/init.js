@@ -1,6 +1,8 @@
 let cellsContentDiv = document.querySelector(".cells-content");
 function initCells(){
-    let cellsContent = "<div class='top-left-cell'></div>";
+    let cellsContent = '<div class="small-box"></div>';
+    cellsContent += '<div class="username-div"></div>';
+    cellsContent += "<div class='top-left-cell'></div>";
     cellsContent += "<div class='top-row'>"
     for(let i=0 ; i<26 ; i++){
         cellsContent += `<div class='top-row-cell' trid="${i}">${String.fromCharCode(65+i)}</div>`
@@ -45,7 +47,8 @@ function initDB(){
                 childrens:[],
                 parents:[],
                 visited:false,
-                fontStyle : {bold:false , italic:false , underline:false }
+                fontStyle : {bold:false , italic:false , underline:false } ,
+                textAlign : "left"
             }
             row.push(cellObject);
         }

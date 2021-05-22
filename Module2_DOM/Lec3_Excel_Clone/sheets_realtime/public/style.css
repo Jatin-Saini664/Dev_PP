@@ -1,8 +1,8 @@
 :root {
     --border-color: #EFF0EF;
     --cell-background: #F5F6F5;
-    --active-cell:#2ecc71;
-    --cell-selected:#E5E6E5;
+    --active-cell: #2ecc71;
+    --cell-selected: #E5E6E5;
 }
 
 * {
@@ -166,15 +166,6 @@
     cursor: pointer;
 }
 
-.file {
-}
-
-.home {
-}
-
-.file-menu-options {
-}
-
 .home-menu-options {
     display: flex;
     align-items: center;
@@ -193,7 +184,7 @@
 .font-style {
     display: flex;
     width: 150px;
-    height: 100%;
+    height: 60%;
     justify-content: space-around;
     align-items: center;
     border-right: 1px solid lightgray;
@@ -214,7 +205,23 @@
     opacity: 0.5;
 }
 
-.font-style div .fas {
+.font-size {
+    width: 200px;
+}
+
+.font-size select {
+    background: var(--cell-background);
+    outline: none;
+    border-radius: 5px;
+    height: 100%;
+}
+
+.font-type {
+    width: 110px;
+}
+
+.font-text-size {
+    width: 55px;
 }
 
 .active-font-style {
@@ -235,10 +242,39 @@
     padding: 5px;
 }
 
-.active-cell{
+.small-box{
+    height: 5px;
+    width: 5px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
     border: 2px solid var(--active-cell);
+    background: var(--active-cell);
+    z-index: 2;
+    border-radius: 1px;
 }
 
-.cell-selected{
+.active-cell {
+    border: 2px solid var(--active-cell);
+    
+}
+
+.cell-selected {
     background: #E5E6E5;
+}
+
+.realtime-cell {
+    border: 2px solid #9b59b6;
+    position: relative;
+}
+
+.username-div {
+    position: absolute;
+    /* background: #9b59b6; */
+    color: #9b59b6;
+    /* padding: 4px; */
+    z-index: 2;
+    font-size: 10px;
+    left: 0px;
+    top: 0px;
 }

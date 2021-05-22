@@ -4,7 +4,17 @@ let topLeftCell = document.querySelector(".top-left-cell");
 let allCells = document.querySelectorAll(".cell");
 let addressInput = document.querySelector("#address");
 let formulaInput = document.querySelector("#formula");
+let box = document.querySelector('.small-box');
+let fontColor = document.querySelector('.font-color');
+let cellColor = document.querySelector('.cell-color');
 let lastSelectedCell;
+
+
+
+let username = prompt("Enter Your Name !");
+socket.emit("userConnected" , username );
+
+
 
 cellsContentDiv.addEventListener("scroll", function (e) {
   let top = e.target.scrollTop;
@@ -33,6 +43,8 @@ for (let i = 0; i < allCells.length; i++) {
     rowId = Number(e.target.getAttribute("rowid"));
     colId = Number(e.target.getAttribute("colid"));
     e.target.classList.add("active-cell");
+    box.style.top=(17+20*(rowId+1))+"px";
+    box.style.left = (37+90*(colId+1))+"px";
     document.querySelector(`div[trid="${colId}"]`).classList.add("cell-selected");
     document.querySelector(`div[lcid="${rowId}"]`).classList.add("cell-selected");
 
@@ -41,6 +53,8 @@ for (let i = 0; i < allCells.length; i++) {
     addressInput.value = address;
     formulaInput.value = cellObject.formula;
 
+
+    // bold underline italic set hojata
     cellObject.fontStyle.bold
       ? document.querySelector(".bold").classList.add("active-font-style")
       : document.querySelector(".bold").classList.remove("active-font-style");
@@ -54,6 +68,18 @@ for (let i = 0; i < allCells.length; i++) {
       : document
           .querySelector(".underline")
           .classList.remove("active-font-style");
+
+    // alignment set hojae
+    // 1. remove already selected text align if exist
+    if(lastSelectedCell){
+      document.querySelector(".font-alignments .active-font-style").classList.remove("active-font-style");
+    }
+    // 2. set active text align for the selected cell
+   let textAlignment = cellObject.textAlign;
+   document.querySelector(`.${textAlignment}`).classList.add("active-font-style");
+
+
+   socket.emit("cellClicked" , {rowId , colId} );
   });
 
   allCells[i].addEventListener("blur", function (e) {
@@ -96,7 +122,36 @@ for (let i = 0; i < allCells.length; i++) {
       }
     }
   });
+
+
+
+  allCells[i].addEventListener("keyup" , function(e){
+    let cellValue = allCells[i].textContent;
+    // console.log(cellValue)
+    socket.emit("cellValue" , {cellValue, rowId, colId});
+  })
 }
+
+fontColor.addEventListener("click", function(e){
+  // fontColor.querySelector('input').style.opacity=0;
+  let input = fontColor.querySelector("input");
+  input.click();
+  input.addEventListener('input', function(){
+    let fontC = fontColor.querySelector('input').value;
+    console.log(fontC);
+    lastSelectedCell.style.color=fontC;
+  })
+})
+
+cellColor.addEventListener("click", function(e){
+  let input = cellColor.querySelector("input");
+  input.click();
+  input.addEventListener('input', function(){
+    let fontC = cellColor.querySelector('input').value;
+    console.log(fontC);
+    lastSelectedCell.style.backgroundColor=fontC;
+  })
+})
 
 // when someone leaves the formula input !!
 formulaInput.addEventListener("blur", function (e) {
