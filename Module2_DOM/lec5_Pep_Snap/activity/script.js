@@ -2,80 +2,82 @@ let videoPlayer = document.querySelector("video");
 let recordButton = document.querySelector("#record-video");
 let photoButton = document.querySelector("#capture-photo");
 let recordingState = false;
-
-let constraints = {video:true};
-
-let mediaRecorder;
+let constraints = { video: true };
 let recordedData;
+let mediaRecorder;
 
+(async function () {
+  let mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
+  videoPlayer.srcObject = mediaStream;
+  mediaRecorder = new MediaRecorder(mediaStream);
+  // so next we have attached functions to these events
+  mediaRecorder.onstart = function (e) {
+    console.log("Inside on start !!");
+    console.log(e);
+  };
 
-(async function(){
-    let mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-    console.log(mediaStream);
-    mediaRecorder = new MediaRecorder(mediaStream);
+  mediaRecorder.ondataavailable = function (e) {
+    console.log("Inside on data available !!");
+    console.log(e.data);
+    // let blob = new Blob( e.data , {"type":"video/mp4"});
+    recordedData = e.data;
+    saveVideoToFs();
+  };
 
-    mediaRecorder.onstop = function(e){
-        // console.log(e);
+  mediaRecorder.onstop = function (e) {
+    console.log("Inside on stop !!");
+    console.log(e);
+  };
+
+  // attach click event on recordButton
+  recordButton.addEventListener("click", function () {
+    if (recordingState) {
+      // stop the recording
+      mediaRecorder.stop();
+      recordButton.querySelector("div").classList.remove("record-animate");
+    } else {
+      //start the recording
+      mediaRecorder.start();
+      recordButton.querySelector("div").classList.add("record-animate");
     }
+    recordingState = !recordingState;
+  });
 
-    mediaRecorder.onstart = function(e){
-        // console.log(e);
-    }
-
-    mediaRecorder.ondataavailable = function(e){
-        // console.log(e);
-        let chunks = [];
-        chunks.push(e.data);
-        let blob = new Blob(chunks, {type:"video/mp4"}); // how to change content type of blob
-        recordedData = blob;
-        console.log(recordedData);
-        saveVideoFS();
-    }
-
-    recordButton.addEventListener("click", function(e){
-        if(recordingState){
-            mediaRecorder.stop();
-            recordButton.innerHTML = "Record";
-        }else{
-            mediaRecorder.start();
-            recordButton.innerHTML = "Recording";
-        }
-        recordingState = !recordingState;
-        
-    })
-
-    photoButton.addEventListener("click", function(){
-        capturePhoto();
-    })
-
-
-    videoPlayer.srcObject=mediaStream;
+  photoButton.addEventListener("click", capturePhotos);
 })();
 
+function saveVideoToFs() {
+  console.log("Saving Video");
+  // file object in recordedData
+  let videoUrl = URL.createObjectURL(recordedData); // convert Blob object into Blob Url
+  console.log(videoUrl);
 
-function saveVideoFS(){
-    let videoUrl = URL.createObjectURL(recordedData);
-    console.log(videoUrl);
-    let aTag = document.createElement("a");
+  let aTag = document.createElement("a");
+  aTag.download = "video.mp4";
+  aTag.href = videoUrl;
 
-    aTag.download = "video.mp4";
-    aTag.href = videoUrl;
-
-    aTag.click();
-    aTag.remove();
+  console.log(aTag);
+  aTag.click(); // download start for video
 }
 
-function capturePhoto(){
-    let canvas = document.createElement("canvas");
-    canvas.height = videoPlayer.videoHeight;
-    canvas.width = videoPlayer.videoWidth;
+function capturePhotos() {
+  photoButton.querySelector("div").classList.add("capture-animate");
 
-    let ctx = canvas.getContext("2d");
-    ctx.drawImage(videoPlayer, 0, 0);
-    let imageUrl = canvas.toDataURL("image/jpg");
+  setTimeout(function(){
+    photoButton.querySelector("div").classList.remove("capture-animate");
+  } , 1000);
 
-    let aTag = document.createElement("a");
-    aTag.download = "photos.jpg";
-    aTag.href = imageUrl;
-    aTag.click();
+  let canvas = document.createElement("canvas");
+  canvas.height = videoPlayer.videoHeight;
+  canvas.width = videoPlayer.videoWidth;
+
+  let ctx = canvas.getContext("2d");
+  ctx.drawImage(videoPlayer, 0, 0);
+
+  let imageUrl = canvas.toDataURL("image/jpg"); //canvas object => file url String
+
+  let aTag = document.createElement("a");
+  aTag.download = "photo.jpg";
+  aTag.href = imageUrl;
+  aTag.click();
 }
