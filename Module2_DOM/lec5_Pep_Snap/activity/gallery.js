@@ -1,29 +1,29 @@
 function showMedia() {
-    // assume db is open !!
-    let txn = db.transaction("Media", "readonly");
-    let mediaStore = txn.objectStore("Media");
-    let cursorObject = mediaStore.openCursor();
-  
-    cursorObject.onsuccess = function (e) {
-      let cursor = cursorObject.result;
-      if (cursor) {
-        let media = cursor.value;
-        console.log(media);
-        if (media.mediaType == "image") {
-          appendImage(media);
-        } else {
-          appendVideo(media);
-        }
-        cursor.continue();
+  // assume db is open !!
+  let txn = db.transaction("Media", "readonly");
+  let mediaStore = txn.objectStore("Media");
+  let cursorObject = mediaStore.openCursor();
+
+  cursorObject.onsuccess = function (e) {
+    let cursor = cursorObject.result;
+    if (cursor) {
+      let media = cursor.value;
+      console.log(media);
+      if (media.mediaType == "image") {
+        appendImage(media);
+      } else {
+        appendVideo(media);
       }
-    };
-  }
-  let iv = setInterval(function () {
-    if (db) {
-      showMedia();
-      clearInterval(iv);
+      cursor.continue();
     }
-  }, 100);
+  };
+}
+let iv = setInterval(function () {
+  if (db) {
+    showMedia();
+    clearInterval(iv);
+  }
+}, 100);
   
   let gallery = document.querySelector(".gallery");
   let backBtn = document.querySelector(".back-btn");
